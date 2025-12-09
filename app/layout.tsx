@@ -1,15 +1,20 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
+import { Geist, Geist_Mono } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
+
+const _geist = Geist({ subsets: ["latin"] })
+const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "DishIs Technologies - Developer Tools & Solutions",
+  title: "DishIs Technologies - Developer APIs & Email Services",
   description:
-    "Building developer-friendly tools that simplify API creation, testing, and scaling. Empowering developers to focus on creating amazing software.",
-  generator: "DishIs Technologies",
+    "2M+ API calls processed. Powerful APIs for image hosting, video hosting, code execution, temporary emails, and professional email services. Built for developers.",
+  generator: "v0.app",
+  icons: {
+    icon: "https://avatars.githubusercontent.com/u/120817762?s=200&v=4",
+  },
 }
 
 export default function RootLayout({
@@ -18,20 +23,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <style>{`
-html {
-  font-family: ${GeistSans.style.fontFamily};
-  --font-sans: ${GeistSans.variable};
-  --font-mono: ${GeistMono.variable};
-}
-        `}</style>
-      </head>
-      <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+    <html lang="en">
+      <body className={`font-sans antialiased bg-white text-black`}>
+        {children}
+        <Analytics />
       </body>
     </html>
   )
