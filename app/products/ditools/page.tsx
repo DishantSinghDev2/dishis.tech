@@ -56,7 +56,7 @@ export default function DIToolsPage() {
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </a>
             <a
-              href="https://tools.dishis.tech/c"
+              href="https://c.tools.dishis.tech"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all font-semibold"
