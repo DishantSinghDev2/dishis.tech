@@ -31,7 +31,9 @@ export default function ImageHostingPage() {
                 Access API
               </a>
               <Link
-                href="/contact"
+                href="https://rapidapi.com/dishis-technologies-dishis-technologies-default/api/upload-images-hosting-get-url"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-8 py-3 border border-black text-black rounded-lg hover:bg-gray-50 transition-all font-medium"
               >
                 Get API Key

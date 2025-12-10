@@ -24,7 +24,7 @@ export default function VideoHostingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://rapidapi.com/organization/dishis-technologies"
+                href="https://rapidapi.com/dishis-technologies-dishis-technologies-default/api/upload-videos-hosting-streaming-get-url"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-900 transition-all font-medium"
@@ -32,7 +32,9 @@ export default function VideoHostingPage() {
                 View on RapidAPI
               </a>
               <Link
-                href="/contact"
+                href="https://rapidapi.com/dishis-technologies-dishis-technologies-default/api/upload-videos-hosting-streaming-get-url"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-8 py-3 border border-black text-black rounded-lg hover:bg-gray-50 transition-all font-medium"
               >
                 Request Access
