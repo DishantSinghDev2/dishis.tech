@@ -109,7 +109,7 @@ export default function ContactPage() {
                 <h3 className="font-semibold text-black mb-4">Follow Us</h3>
                 <div className="flex gap-4">
                   <a
-                    href="https://github.com/DishIsh"
+                    href="https://github.com/DishIs"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-4 py-2 border border-gray-300 rounded-lg hover:border-black hover:bg-black hover:text-white transition-all text-sm font-medium"

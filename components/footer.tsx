@@ -117,7 +117,7 @@ export default function Footer() {
             <h3 className="font-semibold mb-4 text-white">Follow Us</h3>
             <div className="flex gap-4">
               <a
-                href="https://github.com/DishIsh"
+                href="https://github.com/DishIs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
