@@ -23,12 +23,12 @@ export default function ImageHostingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://i.dishis.tech"
+                href="https://image.dishis.tech"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-900 transition-all font-medium"
               >
-                Access API
+                Access Demo
               </a>
               <Link
                 href="https://rapidapi.com/dishis-technologies-dishis-technologies-default/api/upload-images-hosting-get-url"
@@ -36,7 +36,7 @@ export default function ImageHostingPage() {
                 rel="noopener noreferrer"
                 className="px-8 py-3 border border-black text-black rounded-lg hover:bg-gray-50 transition-all font-medium"
               >
-                Get API Key
+                Get API
               </Link>
             </div>
           </div>
