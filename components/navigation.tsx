@@ -1,11 +1,11 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useState, useRef, useEffect } from "react"
-import { Menu, X, ChevronDown } from "lucide-react"
+import { Menu, X, ChevronDown, ArrowRight, ArrowUpRight } from "lucide-react"
 import Image from "next/image"
-import { Card } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
+import { company } from "@/lib/company"
 
 // maybe store in db later
 const products = [
@@ -59,11 +59,18 @@ const products = [
   },
 ]
 
+const links = [
+  { name: "About", href: "/about" },
+  { name: "Team", href: "/#team" },
+]
+
 export default function Navigation() {
+  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const [isProductsOpen, setIsProductsOpen] = useState(false)
   const [hoverProduct, setHoverProduct] = useState(products[0])
-  const timeoutRef = useRef<NodeJS.Timeout>()
+  const [scrolled, setScrolled] = useState(false)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
@@ -75,30 +82,44 @@ export default function Navigation() {
   }
 
   useEffect(() => {
-    return () => timeoutRef.current && clearTimeout(timeoutRef.current)
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    }
   }, [])
 
+  const isActive = (href: string) => !href.includes("#") && pathname === href
+
   return (
-    <nav className="fixed top-0 w-full bg-white border-b border-gray-200 z-50 backdrop-blur-sm bg-white/95">
+    <nav
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        scrolled || isOpen
+          ? "bg-white/85 backdrop-blur-xl border-b border-gray-200/80 shadow-[0_1px_12px_rgba(0,0,0,0.04)]"
+          : "bg-white/60 backdrop-blur-md border-b border-transparent"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
 
           {/* brand */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/" className="flex items-center gap-2.5 group">
             <Image
-              src="https://avatars.githubusercontent.com/u/120817762?s=200&v=4"
-              alt="DishIs Technologies"
-              width={32}
-              height={32}
-              className="rounded transition-transform group-hover:scale-110"
+              src={company.logo}
+              alt={company.brandName}
+              width={34}
+              height={34}
+              className="rounded-lg transition-transform group-hover:scale-110"
             />
-            <span className="font-bold text-lg hidden sm:inline text-black">
-              DishIs Technologies
+            <span className="font-bold text-lg hidden sm:inline text-black tracking-tight">
+              {company.brandName}
             </span>
           </Link>
 
           {/* desktop menu */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-1">
 
             {/* Mega Menu */}
             <div
@@ -106,7 +127,15 @@ export default function Navigation() {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <button className="flex items-center gap-1 text-gray-600 hover:text-black text-sm font-medium">
+              <button
+                className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isProductsOpen || pathname.startsWith("/products")
+                    ? "text-black bg-gray-100"
+                    : "text-gray-600 hover:text-black hover:bg-gray-50"
+                }`}
+                aria-expanded={isProductsOpen}
+                onClick={() => setIsProductsOpen((v) => !v)}
+              >
                 Products
                 <ChevronDown
                   size={16}
@@ -117,115 +146,113 @@ export default function Navigation() {
               </button>
 
               {isProductsOpen && (
-                <div
-                  className="
-                    absolute top-full right-0   /* opens left */
-                    w-[900px] mt-3
-                    bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden
-                    flex animate-in fade-in slide-in-from-top-2
-                  "
-                >
-                  {/* LEFT PREVIEW */}
-                  <div className="w-1/2 p-6 bg-gray-50 flex flex-col">
-                    <Card
-                      className="
-                        p-6 flex flex-col gap-4
-                        transition-all duration-300
-                        hover:shadow-lg hover:scale-[1.01]
-                      "
-                    >
-                      <Image
-                        src={hoverProduct.logo || "/placeholder.png"}
-                        alt={hoverProduct.name}
-                        width={90}
-                        height={90}
-                        className="
-                          rounded-md border transition-transform duration-300
-                          hover:scale-110
-                        "
-                      />
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3">
+                  <div className="w-[760px] bg-white border border-gray-200 rounded-2xl shadow-2xl shadow-black/10 overflow-hidden flex animate-in fade-in slide-in-from-top-2">
+                    {/* LEFT PREVIEW */}
+                    <div className="w-[42%] p-5 bg-gradient-to-br from-gray-50 to-blue-50/60 flex flex-col">
+                      <div className="flex-1 rounded-xl bg-white border border-gray-200 p-6 flex flex-col gap-4 shadow-sm">
+                        <Image
+                          src={hoverProduct.logo || "/placeholder.png"}
+                          alt={hoverProduct.name}
+                          width={64}
+                          height={64}
+                          className="rounded-xl border border-gray-100"
+                        />
+                        <div>
+                          <h3 className="font-semibold text-lg text-black">{hoverProduct.name}</h3>
+                          <p className="text-sm text-gray-600 leading-relaxed mt-1">
+                            {hoverProduct.description}
+                          </p>
+                        </div>
+                        <Link
+                          href={hoverProduct.href}
+                          onClick={() => setIsProductsOpen(false)}
+                          className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:gap-2 transition-all"
+                        >
+                          Learn more <ArrowRight size={14} />
+                        </Link>
+                      </div>
+                    </div>
 
-                      <h3 className="font-semibold text-xl">{hoverProduct.name}</h3>
+                    {/* RIGHT LIST */}
+                    <div className="flex-1 p-2">
+                      <div className="grid grid-cols-2 gap-1">
+                        {products.map(p => (
+                          <Link
+                            key={p.href}
+                            href={p.href}
+                            onMouseEnter={() => setHoverProduct(p)}
+                            onClick={() => setIsProductsOpen(false)}
+                            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${
+                              hoverProduct?.name === p.name ? "bg-gray-100" : "hover:bg-gray-50"
+                            }`}
+                          >
+                            <Image
+                              src={p.logo}
+                              alt=""
+                              width={28}
+                              height={28}
+                              className="rounded-md border border-gray-100 flex-shrink-0"
+                            />
+                            <div className="min-w-0">
+                              <div className="text-sm font-medium text-black truncate">{p.name}</div>
+                              <div className="text-xs text-gray-500 truncate">{p.description}</div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
 
-                      <p className="text-sm text-gray-600 leading-relaxed">
-                        {hoverProduct.description}
-                      </p>
-
-                      <Separator />
-
-                      <Link
-                        href={hoverProduct.href}
+                      <a
+                        href={company.social.rapidapi}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         onClick={() => setIsProductsOpen(false)}
-                        className="text-sm font-medium text-blue-600 hover:underline"
+                        className="mt-1 flex items-center justify-between px-3 py-3 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-black border-t border-gray-100"
                       >
-                        Learn more →
-                      </Link>
-                    </Card>
-                  </div>
-
-                  {/* RIGHT LIST */}
-                  <div className="w-1/2 bg-white border-l border-gray-100 py-2">
-                    {products.map(p => (
-                      <Link
-                        key={p.href}
-                        href={p.href}
-                        onMouseEnter={() => setHoverProduct(p)}
-                        onClick={() => setIsProductsOpen(false)}
-                        className={`
-                          block px-4 py-3 text-sm cursor-pointer
-                          transition-colors duration-150
-                          hover:bg-gray-50
-                          ${
-                            hoverProduct?.name === p.name
-                              ? "bg-gray-50"
-                              : ""
-                          }
-                        `}
-                      >
-                        <div className="font-medium text-black">{p.name}</div>
-                        <div className="text-xs text-gray-500">{p.description}</div>
-                      </Link>
-                    ))}
-
-                    <Separator className="my-1" />
-
-                    <Link
-                      href="https://rapidapi.com/organization/dishis-technologies"
-                      target="_blank"
-                      onClick={() => setIsProductsOpen(false)}
-                      className="block px-4 py-3 text-xs hover:bg-gray-50"
-                    >
-                      View all on RapidAPI →
-                    </Link>
+                        View all APIs on RapidAPI
+                        <ArrowUpRight size={14} />
+                      </a>
+                    </div>
                   </div>
                 </div>
               )}
             </div>
 
-            <Link href="#team" className="text-gray-600 hover:text-black text-sm font-medium">
-              Team
-            </Link>
+            {links.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isActive(l.href) ? "text-black bg-gray-100" : "text-gray-600 hover:text-black hover:bg-gray-50"
+                }`}
+              >
+                {l.name}
+              </Link>
+            ))}
 
             <a
-              href="https://github.com/Dishis"
+              href={company.social.github}
               target="_blank"
-              className="text-gray-600 hover:text-black text-sm font-medium"
+              rel="noopener noreferrer"
+              className="px-3 py-2 rounded-lg text-gray-600 hover:text-black hover:bg-gray-50 text-sm font-medium transition-colors"
             >
               GitHub
             </a>
 
             <Link
               href="/contact"
-              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-900 text-sm font-medium"
+              className="ml-3 inline-flex items-center gap-1.5 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 text-sm font-medium transition-all hover:shadow-lg hover:shadow-black/20 group"
             >
               Contact Us
+              <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
 
           {/* mobile toggle */}
           <button
-            className="md:hidden p-2"
+            className="md:hidden p-2 -mr-2 rounded-lg hover:bg-gray-100"
             onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -233,35 +260,51 @@ export default function Navigation() {
 
         {/* mobile */}
         {isOpen && (
-          <div className="md:hidden pb-4 border-t border-gray-200 animate-in fade-in slide-in-from-top-2">
-            <div className="py-2">
-              <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">
+          <div className="md:hidden pb-4 border-t border-gray-200 animate-in fade-in slide-in-from-top-2 max-h-[calc(100vh-4rem)] overflow-y-auto">
+            <div className="py-3">
+              <div className="px-1 pb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Products
               </div>
-              {products.map(p => (
-                <Link
-                  key={p.href}
-                  href={p.href}
-                  onClick={() => setIsOpen(false)}
-                  className="block px-4 py-2 text-gray-600 hover:text-black text-sm"
-                >
-                  {p.name}
-                </Link>
-              ))}
+              <div className="grid grid-cols-2 gap-1">
+                {products.map(p => (
+                  <Link
+                    key={p.href}
+                    href={p.href}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-2 px-2 py-2 rounded-lg text-gray-700 hover:bg-gray-50 text-sm"
+                  >
+                    <Image src={p.logo} alt="" width={22} height={22} className="rounded" />
+                    <span className="truncate">{p.name}</span>
+                  </Link>
+                ))}
+              </div>
             </div>
 
-            <Link
-              href="#team"
-              className="block px-4 py-2 text-gray-600 hover:text-black text-sm"
-              onClick={() => setIsOpen(false)}
-            >
-              Team
-            </Link>
+            <div className="border-t border-gray-100 pt-2">
+              {links.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className="block px-2 py-2.5 text-gray-700 hover:text-black text-sm font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {l.name}
+                </Link>
+              ))}
+              <a
+                href={company.social.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block px-2 py-2.5 text-gray-700 hover:text-black text-sm font-medium"
+              >
+                GitHub
+              </a>
+            </div>
 
             <Link
               href="/contact"
               onClick={() => setIsOpen(false)}
-              className="block mt-4 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-900 text-sm text-center"
+              className="block mt-3 px-4 py-3 bg-black text-white rounded-lg hover:bg-gray-800 text-sm font-medium text-center"
             >
               Contact Us
             </Link>

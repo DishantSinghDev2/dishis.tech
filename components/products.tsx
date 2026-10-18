@@ -1,6 +1,5 @@
-"use client"
-
-import { Code2, Mail, Globe, ImageIcon, Zap, Wrench } from "lucide-react"
+import Link from "next/link"
+import { Code2, Mail, Globe, ImageIcon, Video, Wrench, Inbox, Layers, ArrowUpRight } from "lucide-react"
 
 const products = [
   {
@@ -8,9 +7,9 @@ const products = [
     url: "freecustom.email",
     description:
       "Free temporary email service perfect for testing and privacy-conscious users. Create disposable email addresses instantly.",
-    icon: Mail,
-    color: "bg-black",
-    link: "https://freecustom.email",
+    icon: Inbox,
+    accent: "from-sky-500 to-blue-600",
+    href: "/products/freecustom-email",
   },
   {
     name: "DITMail",
@@ -18,24 +17,25 @@ const products = [
     description:
       "Professional email service for businesses. Custom domains, advanced features, and enterprise-grade reliability.",
     icon: Mail,
-    color: "bg-black",
-    link: "https://mail.dishis.tech",
+    accent: "from-violet-500 to-purple-600",
+    href: "/products/ditmail",
   },
   {
     name: "WhatsYour.Info",
-    link: "https://whatsyour.info",
+    url: "whatsyour.info",
     description:
       "Global user profile platform with built-in SSO for all DishIs products. One account, unified experience across all services.",
     icon: Globe,
-    color: "bg-black",
+    accent: "from-emerald-500 to-teal-600",
+    href: "/products/whatsyour-info",
   },
   {
     name: "DITAPI",
     description:
       "Unified API platform providing access to all our developer tools. Image hosting, code execution, video streaming, and more.",
-    icon: Code2,
-    color: "bg-black",
-    link: "https://rapidapi.com/organization/dishis-technologies",
+    icon: Layers,
+    accent: "from-orange-500 to-rose-500",
+    href: "/products/ditapi",
   },
   {
     name: "DITools",
@@ -43,8 +43,8 @@ const products = [
     description:
       "Free developer utilities including Redis connection tester, MongoDB manager, and file format converter. All at your fingertips.",
     icon: Wrench,
-    color: "bg-black",
-    link: "https://tools.dishis.tech",
+    accent: "from-slate-600 to-slate-900",
+    href: "/products/ditools",
   },
   {
     name: "Image Hosting API",
@@ -52,65 +52,66 @@ const products = [
     description:
       "Powerful image hosting and CDN service. Fast, reliable, and scalable image delivery for your applications.",
     icon: ImageIcon,
-    color: "bg-black",
-    link: "https://i.dishis.tech",
+    accent: "from-pink-500 to-fuchsia-600",
+    href: "/products/image-hosting",
   },
   {
     name: "Code Execution API",
     description:
       "Execute code in multiple languages safely. Perfect for educational platforms, sandboxing, and interactive coding tools.",
     icon: Code2,
-    color: "bg-black",
-    link: "https://rapidapi.com/organization/dishis-technologies",
+    accent: "from-indigo-500 to-blue-700",
+    href: "/products/code-execution",
   },
   {
     name: "Video Hosting API",
     description:
       "Stream and host videos at scale. Optimized encoding, adaptive bitrate streaming, and global CDN coverage.",
-    icon: Zap,
-    color: "bg-black",
-    link: "https://rapidapi.com/organization/dishis-technologies",
+    icon: Video,
+    accent: "from-red-500 to-orange-500",
+    href: "/products/video-hosting",
   },
 ]
 
 export default function Products() {
   return (
-    <section id="products" className="py-20 md:py-32 bg-white border-t border-gray-200">
+    <section id="products" className="scroll-mt-20 py-24 md:py-32 bg-gray-50/70 border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-balance">Our Products & Services</h2>
+          <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">Products</p>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-5 text-balance text-black">
+            Everything you need to ship faster
+          </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             A complete suite of APIs and services designed to power modern applications.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {products.map((product, idx) => {
             const Icon = product.icon
             return (
-              <a
-                key={idx}
-                href={product.link}
-                target={product.link.startsWith("http") ? "_blank" : undefined}
-                rel={product.link.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="group relative p-6 md:p-8 border border-gray-200 rounded-lg hover:border-black hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-white"
-                style={{ animationDelay: `${idx * 100}ms` }}
+              <Link
+                key={product.href}
+                href={product.href}
+                className="group relative flex flex-col p-6 bg-white border border-gray-200 rounded-2xl hover:border-gray-300 hover:shadow-xl hover:shadow-gray-200/70 transition-all duration-300 hover:-translate-y-1 animate-fade-in"
+                style={{ animationDelay: `${idx * 60}ms` }}
               >
-                <div className="absolute inset-0 bg-black/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative z-10">
+                <div className="flex items-start justify-between mb-5">
                   <div
-                    className={`${product.color} w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-white group-hover:scale-110 transition-transform`}
+                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${product.accent} flex items-center justify-center text-white shadow-lg shadow-black/10 group-hover:scale-110 transition-transform`}
                   >
-                    <Icon size={24} />
+                    <Icon size={22} />
                   </div>
-                  <h3 className="text-xl font-bold mb-2 text-black">{product.name}</h3>
-                  {product.url && <p className="text-sm text-gray-500 mb-3 font-mono">{product.url}</p>}
-                  <p className="text-gray-600 text-sm leading-relaxed">{product.description}</p>
-                  <div className="mt-4 flex items-center text-black opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-sm font-semibold">Learn More →</span>
-                  </div>
+                  <ArrowUpRight
+                    size={18}
+                    className="text-gray-300 group-hover:text-black group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all"
+                  />
                 </div>
-              </a>
+                <h3 className="text-lg font-semibold mb-1 text-black">{product.name}</h3>
+                {product.url && <p className="text-xs text-gray-400 mb-3 font-mono">{product.url}</p>}
+                <p className="text-gray-600 text-sm leading-relaxed">{product.description}</p>
+              </Link>
             )
           })}
         </div>

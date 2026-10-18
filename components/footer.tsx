@@ -1,159 +1,159 @@
-"use client"
-
 import Link from "next/link"
-import { Github, Linkedin, Mail, Globe } from "lucide-react"
 import Image from "next/image"
+import { Github, Linkedin, Mail, Globe, Phone, MapPin, ShieldCheck } from "lucide-react"
+import { company } from "@/lib/company"
+
+const productLinks = [
+  { name: "FreeCustom.Email", href: "/products/freecustom-email" },
+  { name: "DITMail", href: "/products/ditmail" },
+  { name: "WhatsYour.Info", href: "/products/whatsyour-info" },
+  { name: "DITAPI", href: "/products/ditapi" },
+  { name: "DITools", href: "/products/ditools" },
+  { name: "Image Hosting", href: "/products/image-hosting" },
+  { name: "Code Execution", href: "/products/code-execution" },
+  { name: "Video Hosting", href: "/products/video-hosting" },
+]
+
+const companyLinks = [
+  { name: "About Us", href: "/about" },
+  { name: "Our Team", href: "/#team" },
+  { name: "Contact", href: "/contact" },
+  { name: "All APIs", href: company.social.rapidapi, external: true },
+  { name: "Crunchbase", href: company.social.crunchbase, external: true },
+]
+
+const socials = [
+  { label: "GitHub", href: company.social.github, icon: Github },
+  { label: "LinkedIn", href: company.social.linkedin, icon: Linkedin },
+  { label: "F6S", href: company.social.f6s, icon: Globe },
+  { label: "Email", href: `mailto:${company.email}`, icon: Mail },
+]
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white border-t border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+    <footer className="relative bg-neutral-950 text-white overflow-hidden">
+      <div className="absolute inset-0 bg-grid-dark mask-fade opacity-40 pointer-events-none" />
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 mb-14">
           {/* Brand */}
-          <div className="md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <Image
-                src="https://avatars.githubusercontent.com/u/120817762?s=200&v=4"
-                alt="DishIs Technologies"
-                width={32}
-                height={32}
-                className="rounded group-hover:scale-110 transition-transform"
-              />              <span className="font-bold text-lg">DishIs Technologies</span>
+          <div className="lg:col-span-4">
+            <Link href="/" className="inline-flex items-center gap-3 mb-5">
+              <Image src={company.logo} alt={company.brandName} width={40} height={40} className="rounded-lg" />
+              <div>
+                <span className="block font-bold text-lg leading-tight">{company.brandName}</span>
+                <span className="block text-xs text-neutral-400">{company.shortEntityType}</span>
+              </div>
+            </Link>
+            <p className="text-neutral-400 text-sm leading-relaxed max-w-sm mb-6">
+              Building powerful, developer-first APIs and email services since {company.foundedYear}. Trusted by
+              developers around the world.
+            </p>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-medium mb-6">
+              <ShieldCheck size={14} />
+              Registered {company.shortEntityType} · {company.status}
             </div>
-            <p className="text-gray-400 text-sm">Building powerful APIs for modern developers.</p>
+            <div className="flex gap-2">
+              {socials.map(({ label, href, icon: Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  className="w-10 h-10 flex items-center justify-center rounded-lg bg-white/5 border border-white/10 hover:bg-white hover:text-black transition-all"
+                >
+                  <Icon size={18} />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Products */}
-          <div>
-            <h3 className="font-semibold mb-4 text-white">Products</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li>
-                <a
-                  href="https://freecustom.email"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  FreeCustom.Email
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://mail.dishis.tech"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  DITMail
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://i.dishis.tech"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  Image Hosting
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://rapidapi.com/organization/dishis-technologies"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  All APIs
-                </a>
-              </li>
+          <div className="lg:col-span-2">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-4">Products</h3>
+            <ul className="space-y-2.5 text-sm">
+              {productLinks.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-neutral-300 hover:text-white transition-colors">
+                    {l.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Company */}
-          <div>
-            <h3 className="font-semibold mb-4 text-white">Company</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li>
-                <Link href="/contact" className="hover:text-white transition-colors">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <a
-                  href="https://www.linkedin.com/company/dishistech"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  LinkedIn
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/DishIsh"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.crunchbase.com/organization/dishis-technologies"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  Crunchbase
-                </a>
-              </li>
+          <div className="lg:col-span-2">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-4">Company</h3>
+            <ul className="space-y-2.5 text-sm">
+              {companyLinks.map((l) =>
+                l.external ? (
+                  <li key={l.href}>
+                    <a
+                      href={l.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-neutral-300 hover:text-white transition-colors"
+                    >
+                      {l.name}
+                    </a>
+                  </li>
+                ) : (
+                  <li key={l.href}>
+                    <Link href={l.href} className="text-neutral-300 hover:text-white transition-colors">
+                      {l.name}
+                    </Link>
+                  </li>
+                ),
+              )}
             </ul>
           </div>
 
-          {/* Social */}
-          <div>
-            <h3 className="font-semibold mb-4 text-white">Follow Us</h3>
-            <div className="flex gap-4">
-              <a
-                href="https://github.com/DishIs"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
-              >
-                <Github size={20} />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/dishistech"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
-              >
-                <Linkedin size={20} />
-              </a>
-              <a
-                href="https://www.f6s.com/company/dishis-technologies"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
-              >
-                <Globe size={20} />
-              </a>
-              <a
-                href="mailto:support@dishis.tech"
-                className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
-              >
-                <Mail size={20} />
-              </a>
-            </div>
+          {/* Contact */}
+          <div className="sm:col-span-2 lg:col-span-4">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-4">Get in touch</h3>
+            <ul className="space-y-4 text-sm">
+              <li className="flex gap-3">
+                <Mail size={18} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                <a href={`mailto:${company.email}`} className="text-neutral-300 hover:text-white transition-colors">
+                  {company.email}
+                </a>
+              </li>
+              <li className="flex gap-3">
+                <Phone size={18} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                <a href={company.phoneHref} className="text-neutral-300 hover:text-white transition-colors">
+                  {company.phone}
+                </a>
+              </li>
+              {[company.principalAddress, company.mailingAddress].map((addr) => (
+                <li key={addr.label} className="flex gap-3">
+                  <MapPin size={18} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs text-neutral-500 mb-0.5">{addr.label}</p>
+                    <address className="not-italic text-neutral-300 leading-relaxed">
+                      {addr.lines.map((line) => (
+                        <span key={line} className="block">
+                          {line}
+                        </span>
+                      ))}
+                    </address>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-          <p>&copy; 2022-{new Date().getFullYear()} DishIs Technologies. All rights reserved.</p>
-          <p>Crafted with ❤️ for developers</p>
+        {/* Bottom bar */}
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row gap-4 justify-between items-center text-xs text-neutral-500">
+          <p className="text-center md:text-left">
+            &copy; {company.foundedYear}–{new Date().getFullYear()} {company.legalName}. All rights reserved.
+          </p>
+          <p className="text-center md:text-right">
+            {company.entityType} · Filing ID {company.filingId}
+          </p>
         </div>
       </div>
     </footer>
