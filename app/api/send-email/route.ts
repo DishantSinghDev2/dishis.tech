@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
         <p>Best regards,<br>${company.brandName} Team</p>
         <hr />
         <p style="color:#6b7280;font-size:12px">
-          ${company.legalName} &middot; ${company.principalAddress.lines.join(", ")}
+          ${company.legalName} &middot; ${company.principalAddress.lines.join(", ")} &middot; ${company.phone}
         </p>
       `,
     })

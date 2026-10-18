@@ -10,8 +10,8 @@ export const company = {
   foundedYear: 2022,
   founder: "Dishant Singh",
   email: "support@dishis.tech",
-  phone: "+91 83689 89758",
-  phoneHref: "tel:+918368989758",
+  phone: "+1 (307) 999-4220",
+  phoneHref: "tel:+13079994220",
   principalAddress: {
     label: "Principal Office (USA)",
     lines: ["1309 Coffeen Avenue, STE 1200", "Sheridan, Wyoming 82801", "United States"],
